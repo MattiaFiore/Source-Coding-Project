@@ -45,3 +45,150 @@ class Group():
   def __str__(self):
     return f'Group: {self.get_group()}\nProbability: {self.get_probability()}\nCode: {self.get_code()}\nMore: {self.get_more()}'
 
+
+def huffman(dictionary):
+  groups = [Group(j,k) for j,k in dictionary.items()]
+
+  while len(groups) > 1:
+
+    # sort
+
+    groups.sort(key = lambda x: x.get_probability(), reverse = True)
+
+    # take last two elements
+
+    elem1 = groups.pop(-1)
+    elem2 = groups.pop(-1)
+
+    # Add bits
+
+    if elem1.get_group() != 'MORE':
+        elem1.add_bit("1")
+    else:
+        for i in elem1.get_more():
+          i.add_bit("1")
+
+
+    if elem2.get_group() != 'MORE':
+        elem2.add_bit("0")
+    else:
+        for i in elem2.get_more():
+            i.add_bit("0")
+
+    # Combine elements and add new elements
+
+    combined = elem1 + elem2
+    groups.append(combined)
+
+  # After the while loop we have just one element inside
+  # the group list and this element will have all all the
+  # groups inside the attribute more:
+
+  dictionary = {i.get_group(): i.get_code() for i in groups[0].get_more()}
+  return dictionary
+
+class Node():
+
+  def __init__(self, string = '', parent = None, data = None):
+
+    self.string = string
+    self.data = data
+    self.parent = parent
+    self.left = None
+    self.right = None
+
+  def get_string(self):
+    return self.string
+
+  def get_left(self):
+    return self.left
+
+  def get_right(self):
+    return self.right
+
+  def get_data(self):
+    return self.data
+
+  def set_string(self, new_string):
+    self.string = new_string
+
+  def set_left(self, new_left):
+    self.left = new_left
+
+  def set_right(self, new_right):
+    self.right = new_right
+
+  def set_data(self, data):
+    self.data = data
+
+  def __str__(self):
+    return self.get_string()
+
+class Tree():
+
+  def __init__(self):
+    # Root is a node with no parent
+    # no left no right child at the moment
+    # No string attached
+
+    self.root = Node('Root')
+    self.node_names = [self.root.get_string()]
+    self.edges = []
+
+  def search(self, father):
+
+    # father is a string
+    node = self.get_root()
+
+    if father == 'Root':
+      return self.get_root()
+
+    for i in father:
+      if i == '0':
+        node = node.get_left()
+        pass
+      else:
+        node = node.get_right()
+
+    return node
+
+  def add_child(self, father, child, data=None):
+
+    """
+    Father: is the data string
+    Child: is the data string
+
+    Our logic will be 0 on the left and 1 on the right
+
+                      Root
+                   /        \
+                  0          1
+                /   \      /   \
+               00   01    10    11
+
+
+    """
+    # We first search for the father
+    father_node = self.search(father)
+
+    if child[-1] == '0':
+      father_node.set_left(Node(string = child, parent = father_node, data = data))
+
+    else:
+      father_node.set_right(Node(string = child, parent = father_node, data = data))
+
+    self.node_names.append(child)
+    self.edges.append((child, father))
+
+  def is_node_present(self, node):
+    return node in self.get_node_names()
+
+  def get_node_names(self):
+    return self.node_names
+
+  def get_edges(self):
+    return self.edges
+
+  def get_root(self):
+    return self.root
+
