@@ -192,3 +192,13 @@ class Tree():
   def get_root(self):
     return self.root
 
+def x_pos(elem, length):
+  x_pos = 0
+  for i in range(len(elem)):
+    if elem[i] == '0':
+      x_pos -= (2**(-i))
+    else:
+      x_pos += (2**(-i))
+  return x_pos
+
+
