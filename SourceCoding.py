@@ -1,3 +1,6 @@
+from itertools import product
+import math
+
 def x_pos(elem, length):
   x_pos = 0
   for i in range(len(elem)):
