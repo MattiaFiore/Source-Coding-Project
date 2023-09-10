@@ -7,6 +7,13 @@ def x_pos(elem, length):
       x_pos += (2**(-i))
   return x_pos
 
+def create_blocks(symbols, length):
+  return list(product(symbols, repeat = length))
+
+def gen_dict(groups, probability):
+  return { j:math.prod([probability[i] for i in j]) for j in groups}
+
+
 def huffman(dictionary):
   groups = [Group(j,k) for j,k in dictionary.items()]
 
