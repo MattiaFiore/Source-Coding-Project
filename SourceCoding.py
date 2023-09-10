@@ -1,3 +1,53 @@
+def x_pos(elem, length):
+  x_pos = 0
+  for i in range(len(elem)):
+    if elem[i] == '0':
+      x_pos -= (2**(-i))
+    else:
+      x_pos += (2**(-i))
+  return x_pos
+
+def huffman(dictionary):
+  groups = [Group(j,k) for j,k in dictionary.items()]
+
+  while len(groups) > 1:
+
+    # sort
+
+    groups.sort(key = lambda x: x.get_probability(), reverse = True)
+
+    # take last two elements
+
+    elem1 = groups.pop(-1)
+    elem2 = groups.pop(-1)
+
+    # Add bits
+
+    if elem1.get_group() != 'MORE':
+        elem1.add_bit("1")
+    else:
+        for i in elem1.get_more():
+          i.add_bit("1")
+
+
+    if elem2.get_group() != 'MORE':
+        elem2.add_bit("0")
+    else:
+        for i in elem2.get_more():
+            i.add_bit("0")
+
+    # Combine elements and add new elements
+
+    combined = elem1 + elem2
+    groups.append(combined)
+
+  # After the while loop we have just one element inside
+  # the group list and this element will have all all the
+  # groups inside the attribute more:
+
+  dictionary = {i.get_group(): i.get_code() for i in groups[0].get_more()}
+  return dictionary
+
 class Group():
 
   def __init__(self, group, probability, code = "", more = []):
@@ -45,47 +95,6 @@ class Group():
   def __str__(self):
     return f'Group: {self.get_group()}\nProbability: {self.get_probability()}\nCode: {self.get_code()}\nMore: {self.get_more()}'
 
-
-def huffman(dictionary):
-  groups = [Group(j,k) for j,k in dictionary.items()]
-
-  while len(groups) > 1:
-
-    # sort
-
-    groups.sort(key = lambda x: x.get_probability(), reverse = True)
-
-    # take last two elements
-
-    elem1 = groups.pop(-1)
-    elem2 = groups.pop(-1)
-
-    # Add bits
-
-    if elem1.get_group() != 'MORE':
-        elem1.add_bit("1")
-    else:
-        for i in elem1.get_more():
-          i.add_bit("1")
-
-
-    if elem2.get_group() != 'MORE':
-        elem2.add_bit("0")
-    else:
-        for i in elem2.get_more():
-            i.add_bit("0")
-
-    # Combine elements and add new elements
-
-    combined = elem1 + elem2
-    groups.append(combined)
-
-  # After the while loop we have just one element inside
-  # the group list and this element will have all all the
-  # groups inside the attribute more:
-
-  dictionary = {i.get_group(): i.get_code() for i in groups[0].get_more()}
-  return dictionary
 
 class Node():
 
@@ -192,13 +201,6 @@ class Tree():
   def get_root(self):
     return self.root
 
-def x_pos(elem, length):
-  x_pos = 0
-  for i in range(len(elem)):
-    if elem[i] == '0':
-      x_pos -= (2**(-i))
-    else:
-      x_pos += (2**(-i))
-  return x_pos
+
 
 
