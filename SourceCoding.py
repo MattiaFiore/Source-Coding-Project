@@ -80,6 +80,109 @@ def encode_arithmetic(probabilities, C, seq, symbols):
     s = s + 2**(-L)
     bits = conv_bit(s, L)
     return bits
+
+
+class Interval():
+
+  def __init__(self, groups_len, probabilities, symbols):
+
+
+    # cumulative is a modified with respect to the theoric one
+    # since we need the 1 for rescaling the ranges
+    self.cumulative = [sum(probabilities[:i]) for i in range(0,len(probabilities)+1)] #is fixed
+    self.complete_range = self.cumulative.copy()
+    # complete_range is used just to get the index positions after
+    # trimming to just one possible range
+    self.feasible_range = self.cumulative.copy()
+
+    self.probabilities = probabilities
+    self.symbols = symbols
+
+    self.decoded_seq = [''] # [symbol1, symbol2, ...]
+    self.symbol_index = 0 # index of the symbols
+
+    self.range = [0,1] # computed range
+    self.exponent = -1
+    self.groups_len = groups_len
+
+
+  def trim_ranges(self):
+
+    indice_min = 0
+    indice_max = len(self.feasible_range)
+
+    for i in range(len(self.feasible_range)-1):
+      if self.range[0] >= self.feasible_range[i+1]:
+        # se l'intervallo è più piccolo dell'estremo destro dell'intervallo
+        indice_min += 1
+
+    for i in range(len(self.feasible_range), 0, -1):
+      if self.range[1] <= self.feasible_range[i-1]:
+        # se è più piccolo dell'estremo sinistro dell'intervalo
+        indice_max -= 1
+
+    self.feasible_range = self.feasible_range[indice_min:indice_max+1]
+
+  def reset(self):
+
+    self.symbol_index += 1
+    self.decoded_seq.append('')
+    self.range = [0,1]
+    self.exponent = -1
+    self.complete_range = self.cumulative.copy()
+    self.feasible_range = self.cumulative.copy()
+
+  def update(self, bit):
+
+      # verify is the bit inserted is 1 or 0 a update the interval
+      if bit == '0':
+          self.range[1] -= 2**self.exponent
+      else:
+          self.range[0] += 2**self.exponent
+
+      #update the count
+      self.exponent -= 1
+
+      # verify which intervals are feasible
+      # now we need to trim the
+      self.trim_ranges()
+
+  def decode(self):
+
+    flag = True
+
+    while flag:
+
+      # we find the letter which is immediately decodable by comparing the
+      # equivalence between the feasible interval and the total posssible intervals
+      # If we are able to decode a letter we could be able to decode another one
+
+      if len(self.decoded_seq[self.symbol_index]) == self.groups_len:
+        # no need to keep decoding
+        '''
+        changes only here
+        '''
+        self.reset()
+
+        return True
+
+      flag = False
+      for i in range(len(self.complete_range)-1):
+
+        if self.feasible_range == [self.complete_range[i], self.complete_range[i+1]]:
+          symbol = i
+          flag = True
+
+          self.decoded_seq[self.symbol_index] += self.symbols[symbol]
+          #we recreate the list:
+          var = self.feasible_range[1]
+          var2 = self.feasible_range[0]
+          self.feasible_range = []
+          for j in range(len(self.cumulative)):
+            self.feasible_range.append(var2 + (var-var2)*self.cumulative[j])
+
+          self.complete_range = self.feasible_range.copy()
+          self.trim_ranges()
   
 def huffman(dictionary):
   groups = [Group(j,k) for j,k in dictionary.items()]
