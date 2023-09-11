@@ -1,6 +1,6 @@
 from itertools import product
 import math
-from math import ceil
+from math import ceil, log2
 
 def x_pos(elem, length):
   x_pos = 0
