@@ -44,7 +44,7 @@ def conv_bit(x, n):
 
     return bits
 
-def encode_shannon_type_legth(probabilities, C, seq, symbols):
+def encode_shannon_type_length(probabilities, C, seq, symbols):
 
     s,l = interval(probabilities, C, seq, symbols)
     print(f's: {s}\nl: {s+l}')
