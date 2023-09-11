@@ -16,6 +16,20 @@ def create_blocks(symbols, length):
 def gen_dict(groups, probability):
   return { j:math.prod([probability[i] for i in j]) for j in groups}
 
+def interval(probabilites, C, seq, symbols):
+
+    s_n = 0
+    l_n = 1
+
+    for k in seq:
+        # j is the index
+        #k is the symbol
+        index = symbols.index(k)
+        s_n = s_n + l_n*C[index]
+        l_n = l_n*probabilites[index]
+
+    return s_n, l_n
+
 
 def huffman(dictionary):
   groups = [Group(j,k) for j,k in dictionary.items()]
