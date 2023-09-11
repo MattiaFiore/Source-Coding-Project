@@ -1,5 +1,6 @@
 from itertools import product
 import math
+from math import ceil
 
 def x_pos(elem, length):
   x_pos = 0
