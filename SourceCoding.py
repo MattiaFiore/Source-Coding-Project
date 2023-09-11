@@ -30,7 +30,56 @@ def interval(probabilites, C, seq, symbols):
 
     return s_n, l_n
 
+def conv_bit(x, n):
 
+    bits = ""
+    val = x
+    for i in range(n):
+        val *= 2
+        if val<1:
+            bits += '0'
+        else:
+            bits += '1'
+            val -= 1
+
+    return bits
+
+def encode_shannon_type_legth(probabilities, C, seq, symbols):
+
+    s,l = interval(probabilities, C, seq, symbols)
+    print(f's: {s}\nl: {s+l}')
+    p = 1
+    for i in seq:
+        p *= probabilities[symbols.index(i)]
+
+    L = ceil(log2(1/p))
+    bits = conv_bit(s, L)
+    return bits
+
+def encode_with_sn(probabilities, C, seq, symbols):
+    s,l = interval(probabilities, C, seq, symbols)
+    print(f's: {s}\nl: {s+l}')
+    p = 1
+    for i in seq:
+        p *= probabilities[symbols.index(i)]
+
+    L = ceil(log2(1/p))
+    s = s + 2**(-L)
+    bits = conv_bit(s, L)
+    return bits
+
+def encode_arithmetic(probabilities, C, seq, symbols):
+    s,l = interval(probabilities, C, seq, symbols)
+    print(f's: {s}\nl: {s+l}')
+    p = 1
+    for i in seq:
+        p *= probabilities[symbols.index(i)]
+
+    L = ceil(log2(1/p)) + 1
+    s = s + 2**(-L)
+    bits = conv_bit(s, L)
+    return bits
+  
 def huffman(dictionary):
   groups = [Group(j,k) for j,k in dictionary.items()]
 
