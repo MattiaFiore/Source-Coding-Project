@@ -69,9 +69,10 @@ def encode_with_sn(probabilities, C, seq, symbols):
     bits = conv_bit(s, L)
     return bits
 
-def encode_arithmetic(probabilities, C, seq, symbols):
+def encode_arithmetic(probabilities, C, seq, symbols, show=False):
     s,l = interval(probabilities, C, seq, symbols)
-    print(f's: {s}\nl: {s+l}')
+    if show == True: 
+      print(f's: {s}\nl: {s+l}')
     p = 1
     for i in seq:
         p *= probabilities[symbols.index(i)]
