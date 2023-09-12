@@ -99,6 +99,43 @@ def compute_length(probabilities, symbol, symbols):
   L = ceil(log2(1/p)) + 1
 
   return L
+
+def arithmetic_decode(symbols, probabilities, block_size, encoded_seq):
+
+  prova = Interval(block_size, probabilities, symbols)
+  bit_count = 0
+  offset = 0
+
+
+  for i in range(len(encoded_seq)):
+    flag = False
+
+    if i + offset > len(encoded_seq)-1:
+        break
+
+    prova.update(encoded_seq[i +  offset])
+
+
+    bit_count += 1
+
+    if len(prova.feasible_range) == 2:
+        flag = prova.decode()
+
+    if flag == True:
+        # if you decode the symbol
+        # you can compute how many bits you need
+        # then you can add an offset to the reading
+
+        L = compute_length(probabilities, prova.decoded_seq[prova.symbol_index-1], symbols)
+        if L > bit_count:
+
+          offset += L-bit_count
+
+
+        bit_count = 0
+
+  return "".join(prova.decoded_seq)
+  
   
 class Interval():
 
