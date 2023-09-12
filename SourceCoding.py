@@ -81,7 +81,25 @@ def encode_arithmetic(probabilities, C, seq, symbols):
     bits = conv_bit(s, L)
     return bits
 
+def compute_length(probabilities, symbol, symbols):
+  # you get a simble like: x1 x2 x2
+  # you compute p(x1) * p(x2) * p(x3)
 
+  '''
+  p = 1
+  for i in symbol:
+
+    p *= probabilities[symbols.index(i)]
+
+  L = ceil(log2(1/p)) + 1
+  return L
+
+  '''
+  p = prod([probabilities[symbols.index(i)] for i in symbol])
+  L = ceil(log2(1/p)) + 1
+
+  return L
+  
 class Interval():
 
   def __init__(self, groups_len, probabilities, symbols):
