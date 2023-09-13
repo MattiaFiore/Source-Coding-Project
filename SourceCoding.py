@@ -181,6 +181,9 @@ class Interval():
 
   def trim_ranges_opt(self, bit):
 
+    indice_min = 0
+    indice_max = len(self.feasible_range)
+    
     if bit == '0':
 
       for i in range(len(self.feasible_range), 0, -1):
