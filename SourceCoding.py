@@ -110,7 +110,6 @@ def arithmetic_decode(symbols, probabilities, block_size, encoded_seq):
 
   for i in range(len(encoded_seq)):
     flag = False
-    print(f'bit: {i}')
     if i + offset > len(encoded_seq)-1:
         break
 
