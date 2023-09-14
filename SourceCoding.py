@@ -166,7 +166,7 @@ class Interval():
 
     indice_min = 0
     indice_max = len(self.feasible_range)
-
+    
     for i in range(len(self.feasible_range)-1):
       if self.range[0] >= self.feasible_range[i+1]:
         # se l'intervallo è più piccolo dell'estremo destro dell'intervallo
@@ -180,7 +180,9 @@ class Interval():
     self.feasible_range = self.feasible_range[indice_min:indice_max+1]
 
   def trim_ranges_opt(self, bit):
-
+    print('BEFORE')
+    print(self.feasible_range)
+    print('AFTER')
     if bit == '0':
       self.feasible_range = [i for i in self.feasible_range if i <= self.range[1]]
       print(self.feasible_range)
@@ -188,6 +190,8 @@ class Interval():
     else: 
       self.feasible_range = [i for i in self.feasible_range if i >= self.range[0]]
       print(self.feasible_range)
+
+    print('------')
       
       
 
@@ -210,7 +214,7 @@ class Interval():
 
       #update the count
       self.exponent -= 1
-
+      print(self.range)
       # verify which intervals are feasible
       # now we need to trim the
       self.trim_ranges_opt(bit)
