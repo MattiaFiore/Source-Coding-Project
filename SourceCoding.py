@@ -216,7 +216,7 @@ class Interval():
       # now we need to trim the
       self.trim_ranges_opt(bit)
 
-  def decode(self):
+  def decode(self, bit):
 
     flag = True
 
