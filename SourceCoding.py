@@ -120,7 +120,7 @@ def arithmetic_decode(symbols, probabilities, block_size, encoded_seq):
     bit_count += 1
 
     if len(prova.feasible_range) == 2:
-        flag = prova.decode()
+        flag = prova.decode(i)
 
     if flag == True:
         # if you decode the symbol
@@ -185,16 +185,10 @@ class Interval():
     indice_max = len(self.feasible_range)
     
     if bit == '0':
-      for i in range(len(self.feasible_range)-1):
-        if self.range[0] >= self.feasible_range[i+1]:
-          # se l'intervallo è più piccolo dell'estremo destro dell'intervallo
-          indice_min += 1
+      self.feasible_range = [i for i in self.feasible_range if < self.range[1]]
       
     else: 
-      for i in range(len(self.feasible_range), 0, -1):
-        if self.range[1] <= self.feasible_range[i-1]:
-          # se è più piccolo dell'estremo sinistro dell'intervalo
-          indice_max -= 1
+      self.feasible_range = [i for i in self.feasible_range if > self.range[0]
       
       
 
@@ -257,7 +251,7 @@ class Interval():
             self.feasible_range.append(var2 + (var-var2)*self.cumulative[j])
 
           self.complete_range = self.feasible_range.copy()
-          self.trim_ranges()
+          self.trim_ranges_opt(bit)
   
 def huffman(dictionary):
   groups = [Group(j,k) for j,k in dictionary.items()]
