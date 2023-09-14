@@ -185,10 +185,10 @@ class Interval():
     indice_max = len(self.feasible_range)
     
     if bit == '0':
-      self.feasible_range = [i for i in self.feasible_range if < self.range[1]]
+      self.feasible_range = [i for i in self.feasible_range if i < self.range[1]]
       
     else: 
-      self.feasible_range = [i for i in self.feasible_range if > self.range[0]
+      self.feasible_range = [i for i in self.feasible_range if i > self.range[0]
       
       
 
