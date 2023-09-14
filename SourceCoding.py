@@ -188,7 +188,7 @@ class Interval():
       self.feasible_range = [i for i in self.feasible_range if i < self.range[1]]
       
     else: 
-      self.feasible_range = [i for i in self.feasible_range if i > self.range[0]
+      self.feasible_range = [i for i in self.feasible_range if i > self.range[0]]
       
       
 
