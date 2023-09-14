@@ -182,11 +182,11 @@ class Interval():
   def trim_ranges_opt(self, bit):
 
     if bit == '0':
-      self.feasible_range = [i for i in self.feasible_range if i < self.range[1]]
+      self.feasible_range = [i for i in self.feasible_range if i <= self.range[1]]
       print(self.feasible_range)
       
     else: 
-      self.feasible_range = [i for i in self.feasible_range if i > self.range[0]]
+      self.feasible_range = [i for i in self.feasible_range if i >= self.range[0]]
       print(self.feasible_range)
       
       
