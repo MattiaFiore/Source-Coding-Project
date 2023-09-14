@@ -120,7 +120,7 @@ def arithmetic_decode(symbols, probabilities, block_size, encoded_seq):
     bit_count += 1
 
     if len(prova.feasible_range) == 2:
-        flag = prova.decode(i)
+        flag = prova.decode()
 
     if flag == True:
         # if you decode the symbol
