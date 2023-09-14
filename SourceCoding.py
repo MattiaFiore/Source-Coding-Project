@@ -198,7 +198,9 @@ class Interval():
         if self.range[0] >= self.feasible_range[i+1]:
           # se l'intervallo è più piccolo dell'estremo destro dell'intervallo
           indice_min += 1
-      print(self.feasible_range)
+
+    self.feasible_range = self.feasible_range[indice_min:indice_max+1]
+    print(self.feasible_range)
 
     print('------')
       
